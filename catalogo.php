@@ -65,12 +65,14 @@ $productos = $conexion->query($query);
                 <?php while($p = $productos->fetch_assoc()): ?>
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="card shadow-sm h-100">
+                            <!-- Imagen del producto -->
                             <?php if($p['imagen']): ?>
                                 <img src="<?= $p['imagen'] ?>" class="card-img-top" alt="<?= htmlspecialchars($p['nombre']) ?>" style="height:220px;object-fit:cover;">
                             <?php else: ?>
                                 <img src="https://via.placeholder.com/250x220?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
                             <?php endif; ?>
                             <div class="card-body text-center">
+                                <!-- Nombre del producto -->
                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($p['nombre']) ?></h5>
                                 <p class="text-muted small mb-1"><?= htmlspecialchars($p['tipo'] ?? 'Sin tipo') ?></p>
                                 <p class="card-text"><?= htmlspecialchars($p['descripcion']) ?></p>
@@ -86,6 +88,12 @@ $productos = $conexion->query($query);
                 </div>
             <?php endif; ?>
         </div>
+
+        <!-- Botón para redirigir al dashboard -->
+        <div class="text-center mt-4">
+            <a href="index.php" class="btn btn-primary">Ir al Dashboard</a>
+        </div>
+
     </div>
 
     <footer class="text-center mt-5 mb-3 text-muted">
@@ -93,5 +101,6 @@ $productos = $conexion->query($query);
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/funciones.js"></script>
 </body>
 </html>

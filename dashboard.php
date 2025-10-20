@@ -1,9 +1,14 @@
 <?php
 session_start();
+
+// Verificar si la sesión está activa
 if (!isset($_SESSION['usuario'])) {
+    // Redirige al login si no está autenticado
     header("Location: index.php");
     exit();
 }
+
+// Si la sesión está activa, mostrar el contenido del dashboard
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,14 +17,13 @@ if (!isset($_SESSION['usuario'])) {
     <title>Panel de Administración - ZapSoft</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/estilos.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">ZapSoft 👟</a>
+            <a class="navbar-brand fw-bold" href="index.php">ZapSoft 👟</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,8 +48,7 @@ if (!isset($_SESSION['usuario'])) {
             Puedes gestionar los <b>productos</b> y sus <b>tipos</b>, ver tu inventario y mantener la información actualizada.
         </p>
 
-
-        <!-- 🛍️ Botón nuevo: Ver catálogo público -->
+        <!-- 🛍️ Botón para ir al catálogo -->
         <div class="mt-4">
             <a href="catalogo.php" class="btn btn-outline-primary btn-lg shadow-sm px-4">
                 🛍️ Ver catálogo público

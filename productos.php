@@ -137,6 +137,8 @@ $resultado = $conexion->query("SELECT p.*, t.nombre AS tipo FROM productos p LEF
                         <td><?= $fila['stock'] ?></td>
                         <td><?= htmlspecialchars($fila['tipo'] ?? 'Sin tipo') ?></td>
                         <td class="text-center">
+                            <!-- Botones de Editar y Eliminar -->
+                            <a href="editar_producto.php?id=<?= $fila['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="?eliminar=<?= $fila['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
                         </td>
                     </tr>
@@ -154,4 +156,3 @@ $resultado = $conexion->query("SELECT p.*, t.nombre AS tipo FROM productos p LEF
 
 </body>
 </html>
-

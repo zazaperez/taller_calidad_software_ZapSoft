@@ -27,6 +27,10 @@ if (isset($_POST['editar'])) {
     $stmt->bind_param("ssi", $nombre, $descripcion, $id);
     $stmt->execute();
     $stmt->close();
+    
+    // Redirigir para evitar que el formulario se envíe nuevamente al actualizar
+    header("Location: tipos_productos.php");
+    exit();
 }
 
 // --- ELIMINAR tipo de producto ---
@@ -40,6 +44,17 @@ if (isset($_GET['eliminar'])) {
 
 // --- CONSULTAR todos los tipos ---
 $resultado = $conexion->query("SELECT * FROM tipos_productos ORDER BY id DESC");
+
+// --- CARGAR datos para editar tipo de producto ---
+$tipo_a_editar = null;
+if (isset($_GET['editar'])) {
+    $id_editar = $_GET['editar'];
+    $stmt = $conexion->prepare("SELECT * FROM tipos_productos WHERE id = ?");
+    $stmt->bind_param("i", $id_editar);
+    $stmt->execute();
+    $tipo_a_editar = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,22 +80,28 @@ $resultado = $conexion->query("SELECT * FROM tipos_productos ORDER BY id DESC");
     <div class="container mt-4">
         <h2 class="text-center fw-bold text-primary">👞 Tipos de Productos</h2>
 
-        <!-- Formulario de registro -->
+        <!-- Formulario de registro o edición -->
         <div class="card mt-4 mb-4 shadow-sm">
             <div class="card-header bg-secondary text-white">
-                Agregar / Editar Tipo de Producto
+                <?php echo isset($tipo_a_editar) ? 'Editar' : 'Agregar'; ?> Tipo de Producto
             </div>
             <div class="card-body">
                 <form method="POST" class="row g-3">
-                    <input type="hidden" name="id" id="id">
+                    <?php if (isset($tipo_a_editar)): ?>
+                        <input type="hidden" name="id" value="<?= $tipo_a_editar['id'] ?>">
+                    <?php endif; ?>
                     <div class="col-md-5">
-                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del tipo" required>
+                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del tipo" value="<?= isset($tipo_a_editar) ? htmlspecialchars($tipo_a_editar['nombre']) : '' ?>" required>
                     </div>
                     <div class="col-md-5">
-                        <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción">
+                        <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" value="<?= isset($tipo_a_editar) ? htmlspecialchars($tipo_a_editar['descripcion']) : '' ?>">
                     </div>
                     <div class="col-md-2 d-grid">
-                        <button type="submit" name="agregar" class="btn btn-success">Guardar</button>
+                        <?php if (isset($tipo_a_editar)): ?>
+                            <button type="submit" name="editar" class="btn btn-success">Actualizar</button>
+                        <?php else: ?>
+                            <button type="submit" name="agregar" class="btn btn-success">Guardar</button>
+                        <?php endif; ?>
                     </div>
                 </form>
             </div>
@@ -103,6 +124,8 @@ $resultado = $conexion->query("SELECT * FROM tipos_productos ORDER BY id DESC");
                         <td><?= htmlspecialchars($fila['nombre']) ?></td>
                         <td><?= htmlspecialchars($fila['descripcion']) ?></td>
                         <td class="text-center">
+                            <!-- Botón de editar y eliminar -->
+                            <a href="?editar=<?= $fila['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="?eliminar=<?= $fila['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este tipo?')">Eliminar</a>
                         </td>
                     </tr>
@@ -120,3 +143,4 @@ $resultado = $conexion->query("SELECT * FROM tipos_productos ORDER BY id DESC");
 
 </body>
 </html>
+
